@@ -28,7 +28,7 @@ export default [
         exclude: ["node_modules", "node_modules/**", "node_modules/**/*"],
         presets: ["@babel/preset-react"],
       }),
-      external(["react", "react-dom", "prop-types"]),
+      external(["react", "react-dom", "prop-types", "class-variance-authority", "clsx", "tailwind-merge"]),
       resolve(),
       commonjs(),
     ],
