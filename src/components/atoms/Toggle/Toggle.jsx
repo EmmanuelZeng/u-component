@@ -1,33 +1,18 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
+import Switch from "../Switch/Switch.jsx";
 
 /**
- * Simple toggle switch atom
+ * Alias rétrocompatible du composant Switch.
+ * @deprecated Utiliser Switch à la place.
  */
-const Toggle = ({ checked, onChange, disabled, className, ...props }) => {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => !disabled && onChange && onChange(!checked)}
-      disabled={disabled}
-      className={`relative inline-flex items-center h-6 rounded-full transition-colors focus:outline-none ${
-        checked ? "bg-primary" : "bg-gray-300"
-      } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} ${className}`}
-      {...props}
-    >
-      <span
-        className={`inline-block w-5 h-5 bg-white rounded-full transform transition-transform ${
-          checked ? "translate-x-3" : "translate-x-0"
-        }`}
-      />
-    </button>
-  );
-};
+const Toggle = forwardRef((props, ref) => <Switch ref={ref} {...props} />);
+
+Toggle.displayName = "Toggle";
 
 Toggle.propTypes = {
   checked: PropTypes.bool,
+  defaultChecked: PropTypes.bool,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
   className: PropTypes.string,

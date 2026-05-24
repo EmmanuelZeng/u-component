@@ -1,63 +1,161 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
+import { cva } from "class-variance-authority";
+import { cn, focusRing, disabledStyles } from "../../../lib/utils";
 
-const IconExemple = () => {
-  return (
-    <svg
-      className="w-5 h-5"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fillRule="evenodd"
-        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-        clipRule="evenodd"
-      ></path>
-    </svg>
-  );
-};
+const iconButtonVariants = cva(
+  [
+    "inline-flex items-center justify-center shrink-0",
+    "transition-all duration-200",
+    "active:scale-95",
+    focusRing,
+    disabledStyles,
+  ].join(" "),
+  {
+    variants: {
+      variant: {
+        primary: "bg-primary text-white hover:bg-darkBlue active:bg-dark",
+        secondary: "bg-gray1 text-dark hover:bg-gray2/30 active:bg-gray2/50",
+        outline:
+          "border border-gray2 bg-white text-dark hover:bg-gray1 active:bg-gray2/20",
+        ghost: "bg-transparent text-dark hover:bg-gray1 active:bg-gray2/20",
+        destructive:
+          "bg-danger text-white hover:bg-[#c32020] active:bg-[#a81a1a]",
+        // Rétrocompatibilité
+        contained: "",
+        outlined: "",
+      },
+      size: {
+        xs: "h-7 w-7 p-1",
+        sm: "h-8 w-8 p-1.5",
+        md: "h-10 w-10 p-2",
+        lg: "h-12 w-12 p-2.5",
+        xl: "h-14 w-14 p-3",
+        smaller: "h-6 w-6 p-1",
+        small: "h-8 w-8 p-1.5",
+        medium: "h-10 w-10 p-2",
+        large: "h-12 w-12 p-2.5",
+      },
+      rounded: {
+        none: "rounded-none",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-lg",
+        full: "rounded-full",
+      },
+    },
+    compoundVariants: [
+      {
+        variant: "contained",
+        className: "bg-default text-dark hover:bg-gray1",
+      },
+      {
+        variant: "outlined",
+        className: "border border-gray2 bg-white text-dark hover:bg-gray1",
+      },
+    ],
+    defaultVariants: {
+      variant: "ghost",
+      size: "md",
+      rounded: "md",
+    },
+  }
+);
 
-const IconButton = ({ children, size, type, variant, className, onClick, ...other }) => {
-  const styleButton =
-    variant === "outlined" ? `btn-outline-${type}` : `btn-${type}`;
-  const padding = size === 'smaller' ? '1' : size === 'small' ? '2' : size === 'medium' ? '2' : '4';
-  return (
-    <button
-      onClick={onClick}
-      type="button"
-      className={`${styleButton} ${className} focus:outline-none font-medium rounded-md text-sm text-center inline-flex items-center p-${padding}`}
-      {...other}
-    >
-      {children}
-    </button>
-  );
-};
+function resolveVariant(variant, type) {
+  if (["primary", "secondary", "outline", "ghost", "destructive"].includes(variant)) {
+    return variant;
+  }
+  if (variant === "outlined") return "outline";
+  if (variant === "contained") {
+    const typeMap = {
+      primary: "primary",
+      danger: "destructive",
+      default: "secondary",
+      info: "primary",
+      success: "primary",
+    };
+    return typeMap[type] || "secondary";
+  }
+  return variant || "ghost";
+}
+
+const IconButton = forwardRef(
+  (
+    {
+      children,
+      variant,
+      type,
+      size,
+      rounded,
+      disabled,
+      loading,
+      className,
+      onClick,
+      "aria-label": ariaLabel,
+      ...props
+    },
+    ref
+  ) => {
+    const resolvedVariant = resolveVariant(variant, type);
+
+    return (
+      <button
+        ref={ref}
+        type="button"
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        aria-label={ariaLabel}
+        onClick={onClick}
+        className={cn(
+          iconButtonVariants({ variant: resolvedVariant, size, rounded }),
+          loading && "cursor-wait opacity-70",
+          className
+        )}
+        {...props}
+      >
+        {loading ? (
+          <span
+            className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+            aria-hidden="true"
+          />
+        ) : (
+          children
+        )}
+      </button>
+    );
+  }
+);
+
+IconButton.displayName = "IconButton";
 
 IconButton.propTypes = {
-  /**
-   * The content of the component.
-   */
-  children: PropTypes.object.isRequired,
-  /**
-   * The color of component
-   */
+  children: PropTypes.node.isRequired,
+  variant: PropTypes.oneOf([
+    "primary", "secondary", "outline", "ghost", "destructive",
+    "contained", "outlined",
+  ]),
   type: PropTypes.oneOf(["default", "primary", "info", "danger", "success"]),
-  /**
-   * The variant to use.
-   */
-  variant: PropTypes.oneOf(["contained", "outlined"]),
-  /**
-   * The size of the component.
-   */
-  size: PropTypes.oneOf(["small", "medium", "large"]),
+  size: PropTypes.oneOf([
+    "xs", "sm", "md", "lg", "xl", "smaller", "small", "medium", "large",
+  ]),
+  rounded: PropTypes.oneOf(["none", "sm", "md", "lg", "full"]),
+  disabled: PropTypes.bool,
+  loading: PropTypes.bool,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+  "aria-label": PropTypes.string,
 };
 
 IconButton.defaultProps = {
+  variant: "ghost",
   type: "default",
-  children: IconExemple(),
-  variant: "contained",
-  size: 'medium'
+  size: "md",
+  rounded: "md",
+  disabled: false,
+  loading: false,
+  className: "",
 };
 
 export default IconButton;
+export { iconButtonVariants };
