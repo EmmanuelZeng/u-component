@@ -17,8 +17,14 @@ import Card from "./components/atoms/Card/Card.jsx";
 import Avatar from "./components/atoms/Avatar/Avatar.jsx";
 import SearchInput from "./components/atoms/SearchInput/SearchInput.jsx";
 import ClickAway from "./components/atoms/ClickAway/ClickAway.jsx";
-import TextArea from "./components/atoms/TextArea/TextArea.jsx";
-import Combobox from './components/organisms/Combobox/Combobox.jsx'
+import Textarea from "./components/atoms/Textarea/Textarea.jsx";
+import Combobox from "./components/organisms/Combobox/Combobox.jsx";
+import Toggle from "./components/atoms/Toggle/Toggle.jsx";
+import SearchField from "./components/molecules/SearchField/SearchField.jsx";
+import ProductCard from "./components/organisms/ProductCard/ProductCard.jsx";
+import DashboardLayout from "./components/templates/DashboardLayout/DashboardLayout.jsx";
+
+export * from "./components/atoms/index.js";
 
 export {
   Button,
@@ -27,6 +33,10 @@ export {
   RadioBtn,
   RadioBtnCard,
   Combobox,
+  Toggle,
+  SearchField,
+  ProductCard,
+  DashboardLayout,
   Logo,
   TextField,
   SelectInput,
@@ -41,5 +51,7 @@ export {
   Avatar,
   SearchInput,
   ClickAway,
-  TextArea
+  Textarea,
 };
+
+export { Textarea as TextArea };
