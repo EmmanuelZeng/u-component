@@ -10,6 +10,7 @@ export { default as CurrencyInput } from "./CurrencyInput/CurrencyInput.jsx";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.jsx";
 export { default as Pagination } from "./Pagination/Pagination.jsx";
 export { default as Tabs } from "./Tabs/Tabs.jsx";
+export { default as StepIndicator } from "./StepIndicator/StepIndicator.jsx";
 export { default as Stepper } from "./Stepper/Stepper.jsx";
 export { default as MenuItem } from "./MenuItem/MenuItem.jsx";
 export { default as DropdownMenu } from "./DropdownMenu/DropdownMenu.jsx";
